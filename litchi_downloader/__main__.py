@@ -1,6 +1,6 @@
 """Run the command line interface by default."""
 
 
-from litchi import cli
+from litchi_downloader import cli
 
 cli.run()
