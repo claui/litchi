@@ -1,0 +1,57 @@
+[build-system]
+requires = ["poetry-core>=1.9.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "litchi-downloader"
+version = "0.1.0"
+description = "Unofficial Linux itch.io interface for downloading purchased games"
+readme = "README.md"
+authors = [
+    "Claudia Pellegrino <clau@tiqua.de>",
+]
+license = "Apache-2.0"
+
+[tool.poetry.dependencies]
+python = "~3.11"
+colorama = "*"
+dataclass-wizard = "~=0.22"
+fire = "*"
+
+[tool.poetry.group.dev.dependencies]
+autopep8 = "*"
+mypy = "~=1.8"
+pdoc = "~=14.0"
+poethepoet = "~=0.24"
+pylint = "~=3.0"
+pytest = "*"
+types-colorama = "*"
+
+[tool.poetry.scripts]
+litchidownloader = "litchi_downloader.cli:run"
+
+[tool.poe]
+verbosity = -1
+
+[tool.poe.tasks]
+tasks.cmd = "poe -v"
+tasks.help = "List available tasks"
+cli.script = "litchi_downloader.cli:run"
+cli.help = "Run command line interface"
+doc.cmd = "pdoc litchi_downloader !litchi_downloader.settings"
+doc.help = "Browse documentation"
+hello.script = "litchi_downloader.cli:run('hello')"
+hello.help = "Run hello"
+linter.cmd = "pylint --enable-all-extensions litchi_downloader"
+linter.help = "Check for style violations"
+tests.cmd = "pytest"
+tests.help = "Run test suite"
+typecheck.cmd = "mypy"
+typecheck.help = "Run static type checker"
+
+[tool.pyright]
+reportUnsupportedDunderAll = "none"
+
+[tool.pytest.ini_options]
+testpaths = "tests"
+xfail_strict = true

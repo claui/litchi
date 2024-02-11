@@ -1,0 +1,61 @@
+# Maintainer: Claudia Pellegrino <clau@tiqua.de>
+
+pkgname=litchi-git
+pkgver=VERSION
+pkgrel=1
+pkgdesc='Unofficial Linux itch.io interface'
+arch=('any')
+url='https://github.com/claui/litchi'
+license=('Apache')
+depends=()
+makedepends=(
+  'git'
+  'python-build'
+  'python-installer'
+  'python-poetry-core'
+  'python-wheel'
+)
+checkdepends=('python-pytest')
+provides=('litchi')
+conflicts=('litchi')
+options=('!strip')
+
+source=(
+  "git+file://$(git rev-parse --show-toplevel)"
+)
+
+sha512sums=(
+  'SKIP'
+)
+
+pkgver() {
+  printf "%s.r%s.%s" \
+    "$(poetry version -s)" \
+    "$(git rev-list --count HEAD)" \
+    "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  cd "${srcdir}/litchi"
+  python -m build --wheel --no-isolation
+}
+
+check() {
+  cd "${srcdir}/litchi"
+  python -m pytest
+}
+
+package() {
+  cd "${srcdir}/litchi"
+
+  echo >&2 'Packaging the wheel'
+  python -I -m installer --destdir="${pkgdir}" dist/*.whl
+
+  echo >&2 'Packaging README.md'
+  install -D -m 644 -t "${pkgdir}/usr/share/doc/${pkgname}" \
+    'README.md'
+
+  echo >&2 'Packaging the license'
+  install -D -m 644 -t "${pkgdir}/usr/share/licenses/${pkgname}" \
+    'LICENSE'
+}

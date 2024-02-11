@@ -1,0 +1,6 @@
+/src/
+/pkg/
+/litchi/
+*.log
+*.pkg.*
+*.tar.*
